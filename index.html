@@ -99,6 +99,133 @@
             <a href="#" onclick="showPage('exercises')">exercise</a>
         </p>
     </div>
+	<script>
+        // Your JSON data
+        const apiResponse = {
+            "error": {
+                "code": 429,
+                "message": "Quota exceeded for quota metric 'Queries' and limit 'Queries per day' of service 'books.googleapis.com' for consumer 'project_number:624717413613'.",
+                "errors": [
+                    {
+                        "message": "Quota exceeded for quota metric 'Queries' and limit 'Queries per day' of service 'books.googleapis.com' for consumer 'project_number:624717413613'.",
+                        "domain": "global",
+                        "reason": "rateLimitExceeded"
+                    }
+                ],
+                "status": "RESOURCE_EXHAUSTED",
+                "details": [
+                    {
+                        "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+                        "reason": "RATE_LIMIT_EXCEEDED",
+                        "domain": "googleapis.com"
+                    }
+                ]
+            }
+        };
+
+        const outputDiv = document.getElementById("output");
+
+        // Check if response has error
+        if (apiResponse.error) {
+            const error = apiResponse.error;
+
+            outputDiv.innerHTML = `
+                <div class="error-box">
+                    <h2>Error Code: ${error.code}</h2>
+                    <p><strong>Status:</strong> ${error.status}</p>
+                    <p><strong>Message:</strong> ${error.message}</p>
+                    <p><strong>Reason:</strong> ${error.errors[0].reason}</p>
+                </div>
+            `;
+        } else {
+            outputDiv.innerHTML = "<p>No error found.</p>";
+        }
+    </script>
+	<script>
+
+const apiResponse = {
+  "error": {
+    "code": 429,
+    "message": "Quota exceeded for quota metric 'Queries' and limit 'Queries per day' of service 'books.googleapis.com' for consumer 'project_number:624717413613'.",
+    "errors": [
+      {
+        "message": "Quota exceeded for quota metric 'Queries' and limit 'Queries per day' of service 'books.googleapis.com' for consumer 'project_number:624717413613'.",
+        "domain": "global",
+        "reason": "rateLimitExceeded"
+      }
+    ],
+    "status": "RESOURCE_EXHAUSTED",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+        "reason": "RATE_LIMIT_EXCEEDED",
+        "domain": "googleapis.com",
+        "metadata": {
+          "quota_unit": "1/d/{project}",
+          "quota_limit": "defaultPerDayPerProject",
+          "quota_location": "global",
+          "quota_metric": "books.googleapis.com/default",
+          "quota_limit_value": "20000000",
+          "consumer": "projects/624717413613",
+          "service": "books.googleapis.com"
+        }
+      },
+      {
+        "@type": "type.googleapis.com/google.rpc.Help",
+        "links": [
+          {
+            "description": "Request a higher quota limit.",
+            "url": "https://cloud.google.com/docs/quotas/help/request_increase"
+          }
+        ]
+      }
+    ]
+  }
+};
+
+const output = document.getElementById("output");
+
+if (apiResponse.error) {
+    const error = apiResponse.error;
+
+    // Extract metadata
+    const errorInfo = error.details.find(d => d["@type"].includes("ErrorInfo"));
+    const helpInfo = error.details.find(d => d["@type"].includes("Help"));
+
+    const metadata = errorInfo.metadata;
+    const helpLink = helpInfo.links[0];
+
+    output.innerHTML = `
+        <div class="error-container">
+            <h2>Error Code: ${error.code}</h2>
+            <p><strong>Status:</strong> ${error.status}</p>
+            <p><strong>Main Message:</strong> ${error.message}</p>
+            <p><strong>Reason:</strong> ${error.errors[0].reason}</p>
+
+            <div class="metadata">
+                <h3>Quota Details</h3>
+                <p><strong>Service:</strong> ${metadata.service}</p>
+                <p><strong>Quota Metric:</strong> ${metadata.quota_metric}</p>
+                <p><strong>Quota Limit:</strong> ${metadata.quota_limit}</p>
+                <p><strong>Quota Limit Value:</strong> ${metadata.quota_limit_value}</p>
+                <p><strong>Quota Unit:</strong> ${metadata.quota_unit}</p>
+                <p><strong>Location:</strong> ${metadata.quota_location}</p>
+                <p><strong>Consumer:</strong> ${metadata.consumer}</p>
+            </div>
+
+            <div class="metadata">
+                <h3>Help</h3>
+                <p>${helpLink.description}</p>
+                <a href="${helpLink.url}" target="_blank">Request Quota Increase</a>
+            </div>
+        </div>
+    `;
+} else {
+    output.innerHTML = "<p>No error found.</p>";
+}
+
+</script>
+
 
 </body>
 </html>
