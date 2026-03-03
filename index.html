@@ -104,45 +104,84 @@
 <div id="output"></div>	
 	<script>
         // Your JSON data
-        const apiResponse = {
-            "error": {
-                "code": 429,
-                "message": "Quota exceeded for quota metric 'Queries' and limit 'Queries per day' of service 'books.googleapis.com' for consumer 'project_number:624717413613'.",
-                "errors": [
-                    {
-                        "message": "Quota exceeded for quota metric 'Queries' and limit 'Queries per day' of service 'books.googleapis.com' for consumer 'project_number:624717413613'.",
-                        "domain": "global",
-                        "reason": "rateLimitExceeded"
-                    }
-                ],
-                "status": "RESOURCE_EXHAUSTED",
-                "details": [
-                    {
-                        "@type": "type.googleapis.com/google.rpc.ErrorInfo",
-                        "reason": "RATE_LIMIT_EXCEEDED",
-                        "domain": "googleapis.com"
-                    }
-                ]
-            }
-        };
+       const bookData = {
+  "kind": "books#volume",
+  "id": "Wfan6L9RGgYC",
+  "volumeInfo": {
+    "title": "The Modern Web",
+    "subtitle": "Multi-device Web Development with HTML5, CSS3, and JavaScript",
+    "authors": ["Peter Gasston"],
+    "publisher": "No Starch Press",
+    "publishedDate": "2013",
+    "description": "<p><b>A Guide to Modern Web Development</b><br></p><p>Today's web technologies are evolving at near-light speed...</p>",
+    "industryIdentifiers": [
+      {"type": "ISBN_10", "identifier": "1593274874"},
+      {"type": "ISBN_13", "identifier": "9781593274870"}
+    ],
+    "categories": [
+      "Computers / Web / Design",
+      "Computers / Programming Languages / JavaScript"
+    ],
+    "averageRating": 4.5,
+    "ratingsCount": 3,
+    "imageLinks": {
+      "thumbnail": "http://books.google.com/books/content?id=Wfan6L9RGgYC&printsec=frontcover&img=1&zoom=1"
+    },
+    "previewLink": "http://books.google.com/books?id=Wfan6L9RGgYC",
+    "infoLink": "https://play.google.com/store/books/details?id=Wfan6L9RGgYC"
+  }
+};
 
-        const outputDiv = document.getElementById("output");
+const output = document.getElementById("output");
 
-        // Check if response has error
-        if (apiResponse.error) {
-            const error = apiResponse.error;
+const info = bookData.volumeInfo;
 
-            outputDiv.innerHTML = `
-                <div class="error-box">
-                    <h2>Error Code: ${error.code}</h2>
-                    <p><strong>Status:</strong> ${error.status}</p>
-                    <p><strong>Message:</strong> ${error.message}</p>
-                    <p><strong>Reason:</strong> ${error.errors[0].reason}</p>
-                </div>
-            `;
-        } else {
-            outputDiv.innerHTML = "<p>No error found.</p>";
-        }
+// Remove HTML tags from description
+function stripHTML(html) {
+    const temp = document.createElement("div");
+    temp.innerHTML = html;
+    return temp.textContent || temp.innerText || "";
+}
+
+const description = info.description ? stripHTML(info.description) : "No description available.";
+
+output.innerHTML = `
+    <div class="book-container">
+        <div class="book-cover">
+            <img src="${info.imageLinks?.thumbnail || ''}" alt="Book Cover">
+        </div>
+
+        <div class="book-info">
+            <h2>${info.title}</h2>
+            <h3>${info.subtitle || ""}</h3>
+
+            <div class="meta"><strong>Author:</strong> ${info.authors?.join(", ") || "Unknown"}</div>
+            <div class="meta"><strong>Publisher:</strong> ${info.publisher || "N/A"} (${info.publishedDate || "N/A"})</div>
+
+            <div class="meta"><strong>ISBN-10:</strong> ${
+                info.industryIdentifiers?.find(id => id.type === "ISBN_10")?.identifier || "N/A"
+            }</div>
+
+            <div class="meta"><strong>ISBN-13:</strong> ${
+                info.industryIdentifiers?.find(id => id.type === "ISBN_13")?.identifier || "N/A"
+            }</div>
+
+            <div class="meta"><strong>Categories:</strong> ${info.categories?.join(", ") || "N/A"}</div>
+
+            <div class="meta rating">
+                Rating: ${info.averageRating || "N/A"} ⭐ 
+                (${info.ratingsCount || 0} reviews)
+            </div>
+
+            <p>${description}</p>
+
+            <div class="links">
+                <a href="${info.previewLink}" target="_blank">Preview</a>
+                <a href="${info.infoLink}" target="_blank">More Info</a>
+            </div>
+        </div>
+    </div>
+`;
     </script>
 	<script>
 
