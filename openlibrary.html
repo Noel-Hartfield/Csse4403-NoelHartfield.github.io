@@ -1,0 +1,72 @@
+<html>
+<body>
+
+<div id="output"></div>
+
+<script>
+
+
+const bookData = YOUR_JSON_HERE;
+
+const container = document.getElementById("output");
+
+
+const bookKey = Object.keys(bookData)[0];
+const book = bookData[bookKey];
+
+if (book) {
+
+    const title = book.title || "No title";
+    const subtitle = book.subtitle || "";
+    const author = book.authors ? book.authors.map(a => a.name).join(", ") : "Unknown";
+    const publisher = book.publishers ? book.publishers.map(p => p.name).join(", ") : "Unknown";
+    const publishDate = book.publish_date || "Unknown";
+    const pagination = book.pagination || "N/A";
+    const cover = book.cover?.large || book.cover?.medium || "";
+    const url = book.url || "#";
+
+    let tocHTML = "";
+
+    if (book.table_of_contents) {
+        tocHTML = "<ul>";
+        book.table_of_contents.forEach(chapter => {
+            tocHTML += `<li>${chapter.title}</li>`;
+        });
+        tocHTML += "</ul>";
+    }
+
+    container.innerHTML = `
+        <div class="card">
+
+            <div class="top-section">
+                <img src="${cover}" alt="Book Cover">
+
+                <div>
+                    <h2>${title}</h2>
+                    <div class="meta"><strong>Subtitle:</strong> ${subtitle}</div>
+                    <div class="meta"><strong>Author:</strong> ${author}</div>
+                    <div class="meta"><strong>Publisher:</strong> ${publisher}</div>
+                    <div class="meta"><strong>Publish Date:</strong> ${publishDate}</div>
+                    <div class="meta"><strong>Pages:</strong> ${pagination}</div>
+                    <div class="meta">
+                        <a href="${url}" target="_blank">View on Open Library</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="toc">
+                <h3>Table of Contents</h3>
+                ${tocHTML}
+            </div>
+
+        </div>
+    `;
+
+} else {
+    container.innerHTML = "<p>No book data found.</p>";
+}
+
+</script>
+
+</body>
+</html>

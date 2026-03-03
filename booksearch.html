@@ -1,0 +1,61 @@
+<html>
+<body>
+<div id="output1"></div>	
+
+<script>
+
+
+const bookData = YOUR_JSON_HERE; 
+
+const container = document.getElementById("output");
+
+if (bookData.items) {
+
+    bookData.items.forEach(book => {
+
+        const info = book.volumeInfo;
+        const sale = book.saleInfo;
+
+        const title = info.title || "No title";
+        const authors = info.authors ? info.authors.join(", ") : "Unknown author";
+        const publisher = info.publisher || "Unknown publisher";
+        const thumbnail = info.imageLinks?.thumbnail || "";
+        const rating = info.averageRating ? `⭐ ${info.averageRating}` : "";
+        const previewLink = info.previewLink || "#";
+
+        // Price (if for sale)
+        let priceHTML = "";
+        let buyLinkHTML = "";
+
+        if (sale.saleability === "FOR_SALE" && sale.retailPrice) {
+            priceHTML = `<div class="price">$${sale.retailPrice.amount} ${sale.retailPrice.currencyCode}</div>`;
+            buyLinkHTML = `<a href="${sale.buyLink}" target="_blank">Buy</a>`;
+        }
+
+        container.innerHTML += `
+            <div class="card">
+                <img src="${thumbnail}" alt="Book Cover">
+
+                <h3>${title}</h3>
+
+                <div class="meta"><strong>Author:</strong> ${authors}</div>
+                <div class="meta"><strong>Publisher:</strong> ${publisher}</div>
+
+                <div class="rating">${rating}</div>
+                ${priceHTML}
+
+                <div class="links">
+                    <a href="${previewLink}" target="_blank">Preview</a>
+                    ${buyLinkHTML}
+                </div>
+            </div>
+        `;
+    });
+
+} else {
+    container.innerHTML = "<p>No books found.</p>";
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<html>
+<body>
+
+<h1>Search Results</h1>
+<div id="output" class="grid"></div>
+
+<script>
+
+
+const bookData = YOUR_JSON_HERE; 
+
+const container = document.getElementById("output");
+
+if (bookData.docs && bookData.docs.length > 0) {
+
+    bookData.docs.forEach(book => {
+
+        const title = book.title || "No Title";
+        const authors = book.author_name ? book.author_name.join(", ") : "Unknown Author";
+        const publisher = book.publisher ? book.publisher.join(", ") : "Unknown Publisher";
+        const year = book.first_publish_year || "Unknown Year";
+        const isbn = book.isbn ? book.isbn[0] : "N/A";
+        const language = book.language ? book.language.join(", ") : "N/A";
+
+        // Generate cover URL
+        let coverURL = "";
+        if (book.cover_i) {
+            coverURL = `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`;
+        }
+
+        container.innerHTML += `
+            <div class="card">
+                ${coverURL ? `<img src="${coverURL}" alt="Book Cover">` : ""}
+
+                <h3>${title}</h3>
+
+                <div class="meta"><strong>Author:</strong> ${authors}</div>
+                <div class="meta"><strong>Publisher:</strong> ${publisher}</div>
+                <div class="meta year"><strong>First Published:</strong> ${year}</div>
+                <div class="meta"><strong>ISBN:</strong> ${isbn}</div>
+                <div class="meta"><strong>Language:</strong> ${language}</div>
+            </div>
+        `;
+    });
+
+} else {
+    container.innerHTML = "<p>No results found.</p>";
+}
+
+</script>
+
+</body>
+</html>

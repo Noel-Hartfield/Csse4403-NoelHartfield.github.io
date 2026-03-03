@@ -1,0 +1,45 @@
+<hmtl>
+<body>
+
+<h1>Modern Web Development Books</h1>
+<div id="output" class="grid"></div>
+
+<script>
+
+
+const bookData = YOUR_JSON_HERE; 
+
+const container = document.getElementById("output");
+
+if (bookData.Error === "0" && bookData.Books) {
+
+    bookData.Books.forEach(book => {
+
+        const title = book.Title || "No Title";
+        const subtitle = book.SubTitle || "";
+        const description = book.Description || "No description available.";
+        const image = book.Image || "";
+        const isbn = book.isbn || "N/A";
+
+        container.innerHTML += `
+            <div class="card">
+                <img src="${image}" alt="Book Cover">
+
+                <h3>${title}</h3>
+                ${subtitle ? `<div class="subtitle">${subtitle}</div>` : ""}
+
+                <div class="description">${description}</div>
+
+                <div class="isbn">ISBN: ${isbn}</div>
+            </div>
+        `;
+    });
+
+} else {
+    container.innerHTML = "<p>No books found.</p>";
+}
+
+</script>
+
+</body>
+</html>
